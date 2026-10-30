@@ -1,10 +1,14 @@
 #!/bin/bash
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+echo "Project directory: $SCRIPT_DIR"
 
 echo "Welcome to the development environment setup!"
 
-if [ -f "./.env" ]; then
+if [ -f "$SCRIPT_DIR/.env" ]; then
 
-	source .env
+	source "$SCRIPT_DIR/.env"
+	: "${APP_ENV:?APP_ENV is required}"
+	: "${DATABASE_NAME:?DATABASE_NAME is required}"
 	export APP_ENV DATABASE_NAME
 	echo "Environment: $APP_ENV"
 	echo "Database: $DATABASE_NAME"
@@ -40,7 +44,7 @@ else
 
 fi
 
-if [ -d "./source_code" ]; then
+if [ -d "$SCRIPT_DIR/source_code" ]; then
 
 	echo -e "\nChecking source directory..."
 	echo "Source directory already exists!"
@@ -48,7 +52,7 @@ if [ -d "./source_code" ]; then
 else
 	echo "Creating source directory"
 
-	if mkdir ./source_code; then
+	if mkdir "$SCRIPT_DIR/source_code"; then
 		echo "Source directory created successfully..."
 	else
 		echo "ERROR: Could not create source directory."
@@ -57,14 +61,14 @@ else
 
 fi
 
-if [ -d "./source_code/.venv" ]; then
+if [ -d "$SCRIPT_DIR/source_code/.venv" ]; then
 
 	echo "Virtual environment already exists."
 
 else
 	echo "Creating your Virtual environment"
 
-	if python3 -m venv ./source_code/.venv; then
+	if python3 -m venv "$SCRIPT_DIR/source_code/.venv"; then
 		echo "environment created successfully"
 	else
 		echo "ERROR: Could not create environment"
@@ -73,11 +77,11 @@ else
 
 fi
 
-if [ -f "./requirements.txt" ]; then
+if [ -f "$SCRIPT_DIR/requirements.txt" ]; then
 
 	echo "Checking if requirements are available"
 
-	if ./source_code/.venv/bin/python -m pip install -r requirements.txt; then
+	if "$SCRIPT_DIR/source_code/.venv/bin/python" -m pip install -r "$SCRIPT_DIR/requirements.txt"; then
 		echo "Dependencies successfully installed"
 	else
 		echo "Something went wrong"
@@ -90,14 +94,14 @@ else
 fi
 
 
-if [ -d "./source_code/Hello-World" ]; then
+if [ -d "$SCRIPT_DIR/source_code/Hello-World/.git" ]; then
 
     echo "Repository already exists."
 
 else
     echo "Repository not found. Cloning..."
 
-    if git clone "https://github.com/octocat/Hello-World.git" ./source_code/Hello-World; then
+    if git clone "https://github.com/octocat/Hello-World.git" "$SCRIPT_DIR/source_code/Hello-World"; then
     	echo "Git Repo cloned successfully!"
     else
     	echo "Repo failed to clone"
@@ -107,7 +111,7 @@ else
 fi
 
 
-DATABASE_PATH="./source_code/${DATABASE_NAME}.sqlite3"
+DATABASE_PATH="$SCRIPT_DIR/source_code/${DATABASE_NAME}.sqlite3"
 
 if [ -f "$DATABASE_PATH" ]; then
 
@@ -116,7 +120,7 @@ if [ -f "$DATABASE_PATH" ]; then
 else
     echo "Database does not exist. Creating..."
 
-    if ./source_code/.venv/bin/python -c 'import sqlite3, sys; connection = sqlite3.connect(sys.argv[1]); connection.close()' "$DATABASE_PATH"; then
+    if "$SCRIPT_DIR/source_code/.venv/bin/python" -c 'import sqlite3, sys; connection = sqlite3.connect(sys.argv[1]); connection.close()' "$DATABASE_PATH"; then
 
 		echo "Database created"
 	else
