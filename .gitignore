@@ -1,0 +1,11 @@
+# Environment configuration
+.env
+
+# Python virtual environment
+source_code/.venv/
+
+# Generated SQLite databases
+source_code/*.sqlite3
+
+# Cloned example repository
+source_code/Hello-World/
