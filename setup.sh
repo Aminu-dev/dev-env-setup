@@ -124,7 +124,7 @@ else
 
 		echo "Database created"
 	else
-		echo "ERROR: Database creation failed."
+		echo "ERROR: Database creation has failed."
     	exit 1
 	fi
 
