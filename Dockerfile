@@ -6,7 +6,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 WORKDIR /app
 
-COPY setup.sh requirements.txt .
+COPY setup.sh requirements.txt ./
 
 RUN chmod +x setup.sh
 
